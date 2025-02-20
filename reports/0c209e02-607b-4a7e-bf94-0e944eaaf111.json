@@ -1,0 +1,20 @@
+{
+    "custom_title": "my personal survey",
+    "context": "this is very personal",
+    "num_responses": 1,
+    "avg_score": 3.5,
+    "responses": [
+        {
+            "answers": {
+                "life_satisfaction": "4",
+                "positive_emotion": "4",
+                "negative_emotion": "2",
+                "social_support": "4",
+                "physical_health": "2",
+                "mental_health": "3",
+                "open_personal": "lack of sleep"
+            },
+            "score": 3.5
+        }
+    ]
+}
