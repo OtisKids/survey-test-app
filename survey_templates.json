@@ -1,0 +1,12 @@
+{
+  "templates": [
+    {
+      "id": 1,
+      "title": "My template",
+      "questions": [
+        "How do you feel about you today ? ",
+        "Rate your energy levels from 1 to 5, 5 being the maximum"
+      ]
+    }
+  ]
+}

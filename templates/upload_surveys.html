@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Upload Surveys</title>
+</head>
+<body>
+  <h1>Upload Surveys</h1>
+  <form method="post" enctype="multipart/form-data">
+    <label>Select JSON File:</label><br>
+    <input type="file" name="file" accept=".json" required><br><br>
+    <input type="submit" value="Upload">
+  </form>
+  <p><a href="{{ url_for('dashboard') }}">Back to Dashboard</a></p>
+</body>
+</html>

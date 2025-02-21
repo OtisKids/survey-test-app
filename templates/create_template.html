@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Create Survey Template</title>
+</head>
+<body>
+  <h1>Create Survey Template</h1>
+  <form method="post">
+    <label>Template Title:</label><br>
+    <input type="text" name="title" required><br><br>
+    <div id="questions">
+      <label>Question 1:</label><br>
+      <input type="text" name="questions[]" required><br>
+    </div>
+    <button type="button" onclick="addQuestion()">Add Question</button><br><br>
+    <input type="submit" value="Create Template">
+  </form>
+  <p><a href="{{ url_for('dashboard') }}">Back to Dashboard</a></p>
+
+  <script>
+    function addQuestion() {
+      var div = document.getElementById('questions');
+      var count = div.getElementsByTagName('input').length + 1;
+      var label = document.createElement('label');
+      label.innerHTML = 'Question ' + count + ':<br>';
+      var input = document.createElement('input');
+      input.type = 'text';
+      input.name = 'questions[]';
+      input.required = true;
+      div.appendChild(label);
+      div.appendChild(input);
+      div.appendChild(document.createElement('br'));
+    }
+  </script>
+</body>
+</html>

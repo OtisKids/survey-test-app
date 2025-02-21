@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Survey Catalog</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .catalog-container {
+      display: flex;
+      overflow-x: auto;
+      padding: 20px;
+    }
+    .catalog-item {
+      flex: 0 0 auto;
+      background-color: #f0f0f0;
+      margin-right: 15px;
+      padding: 15px;
+      border-radius: 8px;
+      width: 250px;
+      text-align: center;
+    }
+    .catalog-item h3 {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+    }
+    .catalog-item p {
+      font-size: 0.9em;
+      margin-bottom: 10px;
+    }
+    .catalog-item a {
+      text-decoration: none;
+      color: #007BFF;
+    }
+  </style>
+</head>
+<body>
+  <h1>Survey Catalog</h1>
+  <div class="catalog-container">
+    {% if catalog %}
+      {% for survey in catalog %}
+        <div class="catalog-item">
+          <h3>{{ survey.title }}</h3>
+          <p>{{ survey.description or "No description provided." }}</p>
+          <a href="{{ url_for('survey.take_catalog_survey', survey_key=survey.id) }}">Take Survey</a>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>No surveys in the catalog.</p>
+    {% endif %}
+  </div>
+  <p><a href="{{ url_for('dashboard') }}">Back to Dashboard</a></p>
+</body>
+</html>
