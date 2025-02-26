@@ -6,11 +6,19 @@
   <style>
     body {
       font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .cat-heading {
+      margin-top: 40px;
+      margin-bottom: 10px;
+      font-size: 1.5em;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 5px;
     }
     .catalog-container {
       display: flex;
       overflow-x: auto;
-      padding: 20px;
+      padding: 10px 0;
     }
     .catalog-item {
       flex: 0 0 auto;
@@ -33,23 +41,58 @@
       text-decoration: none;
       color: #007BFF;
     }
+    .label {
+      display: inline-block;
+      padding: 3px 7px;
+      margin-bottom: 10px;
+      background-color: #e9e9e9;
+      border-radius: 4px;
+      font-size: 0.8em;
+    }
+    .paid {
+      background-color: #ffcccb;
+      color: #a94442;
+    }
+    .free {
+      background-color: #d4edda;
+      color: #155724;
+    }
   </style>
 </head>
 <body>
   <h1>Survey Catalog</h1>
-  <div class="catalog-container">
-    {% if catalog %}
-      {% for survey in catalog %}
-        <div class="catalog-item">
-          <h3>{{ survey.title }}</h3>
-          <p>{{ survey.description or "No description provided." }}</p>
-          <a href="{{ url_for('survey.take_catalog_survey', survey_key=survey.id) }}">Take Survey</a>
-        </div>
-      {% endfor %}
-    {% else %}
-      <p>No surveys in the catalog.</p>
-    {% endif %}
-  </div>
+
+  {% if catalog and allowedCategories %}
+    {% for category in allowedCategories %}
+      <div class="cat-heading">{{ category }}</div>
+      <div class="catalog-container">
+        {% set surveys_in_category = catalog | selectattr("category", "equalto", category) | list %}
+        {% if surveys_in_category %}
+          {% for survey in surveys_in_category %}
+            <div class="catalog-item">
+              <h3>{{ survey.title }}</h3>
+              <p>{{ survey.description or "No description provided." }}</p>
+              {% if survey.access == "paid" %}
+                <div class="label paid">Paid</div>
+              {% else %}
+                <div class="label free">Free</div>
+              {% endif %}
+              <p>
+                <a href="{{ url_for('survey.take_catalog_survey', survey_key=survey.id) }}">
+                  Take Survey
+                </a>
+              </p>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p>No surveys available for this category.</p>
+        {% endif %}
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No surveys in the catalog.</p>
+  {% endif %}
+
   <p><a href="{{ url_for('dashboard') }}">Back to Dashboard</a></p>
 </body>
 </html>

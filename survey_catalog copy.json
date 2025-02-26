@@ -1,0 +1,220 @@
+{
+    "allowedCategories": [
+      "Editor's picks",
+      "Made by AI",
+      "Huberman style"
+    ],
+    "surveys": [
+      {
+        "id": "personal",
+        "title": "Basic Personal Well-Being Survey",
+        "description": "Assess general life satisfaction, emotional state, social support, and health.",
+        "category": "Editor's picks",
+        "access": "free",
+        "questions": [
+          {
+            "id": "life_satisfaction",
+            "text": "Overall, how satisfied are you with your life right now?",
+            "type": "likert",
+            "scale": [1, 2, 3, 4, 5],
+            "note": "1 = Very dissatisfied, 5 = Very satisfied"
+          },
+          {
+            "id": "positive_emotion",
+            "text": "In the past week, how often have you felt happy or content?",
+            "type": "likert",
+            "scale": [1, 2, 3, 4, 5],
+            "note": "1 = Almost never, 5 = Almost always"
+          },
+          {
+            "id": "negative_emotion",
+            "text": "In the past week, how often have you felt anxious or sad?",
+            "type": "likert",
+            "scale": [1, 2, 3, 4, 5],
+            "note": "1 = Almost always, 5 = Almost never"
+          },
+          {
+            "id": "social_support",
+            "text": "Do you feel that you have someone you can reliably turn to for support during difficult times?",
+            "type": "likert",
+            "scale": [1, 2, 3, 4, 5],
+            "note": "1 = Not at all, 5 = Extremely"
+          },
+          {
+            "id": "physical_health",
+            "text": "Rate your current physical health.",
+            "type": "likert",
+            "scale": [1, 2, 3, 4, 5],
+            "note": "1 = Very poor, 5 = Excellent"
+          },
+          {
+            "id": "mental_health",
+            "text": "Rate your current mental health.",
+            "type": "likert",
+            "scale": [1, 2, 3, 4, 5],
+            "note": "1 = Very poor, 5 = Excellent"
+          },
+          {
+            "id": "open_personal",
+            "text": "Please describe any factors in your personal life that significantly contribute to your overall well-being.",
+            "type": "text"
+          },
+          {
+            "id": "sleep_health",
+            "text": "Rate your current sleep health.",
+            "type": "likert",
+            "scale": [1, 2, 3, 4, 5],
+            "note": "1 = Very poor, 5 = Excellent"
+          }
+        ]
+      },
+      {
+        "id": "work",
+        "title": "Basic Work Environment Well-Being Survey",
+        "description": "Assess job satisfaction, engagement, work-life balance, and support at work.",
+        "category": "Made by AI",
+        "access": "free",
+        "questions": [
+          {
+            "id": "job_satisfaction",
+            "text": "How satisfied are you with your current job?",
+            "type": "likert",
+            "scale": [1, 2, 3, 4, 5],
+            "note": "1 = Very dissatisfied, 5 = Very satisfied"
+          },
+          {
+            "id": "work_engagement",
+            "text": "How engaged do you feel in your daily work tasks?",
+            "type": "likert",
+            "scale": [1, 2, 3, 4, 5],
+            "note": "1 = Not at all engaged, 5 = Fully engaged"
+          },
+          {
+            "id": "work_balance",
+            "text": "How well do you feel you can balance work responsibilities with your personal life?",
+            "type": "likert",
+            "scale": [1, 2, 3, 4, 5],
+            "note": "1 = Very poorly, 5 = Exceptionally well"
+          },
+          {
+            "id": "work_support",
+            "text": "How supported do you feel by your colleagues and supervisors?",
+            "type": "likert",
+            "scale": [1, 2, 3, 4, 5],
+            "note": "1 = Not at all, 5 = Extremely"
+          },
+          {
+            "id": "open_work",
+            "text": "What changes or improvements in your workplace would most enhance your well-being?",
+            "type": "text"
+          }
+        ]
+      },
+      {
+        "id": "advanced",
+        "title": "Advanced Comprehensive Well-Being Survey",
+        "description": "An in-depth survey covering life satisfaction, emotions, relationships, engagement, health, and material conditions.",
+        "category": "Huberman style",
+        "access": "paid",
+        "questions": [
+          {
+            "id": "overall_satisfaction",
+            "text": "Overall, how satisfied are you with your life?",
+            "type": "likert",
+            "scale": [1, 2, 3, 4, 5]
+          },
+          {
+            "id": "life_purpose",
+            "text": "To what extent do you feel that your life has meaning and purpose?",
+            "type": "likert",
+            "scale": [1, 2, 3, 4, 5]
+          },
+          {
+            "id": "positive_emotions",
+            "text": "How often have you experienced positive emotions (joy, contentment) in the past two weeks?",
+            "type": "likert",
+            "scale": [1, 2, 3, 4, 5]
+          },
+          {
+            "id": "negative_emotions",
+            "text": "How often have you experienced negative emotions (sadness, anxiety) in the past two weeks?",
+            "type": "likert",
+            "scale": [1, 2, 3, 4, 5],
+            "note": "Reverse-score this item (1 becomes 5, etc.)"
+          },
+          {
+            "id": "overall_mental",
+            "text": "Rate your overall mental health.",
+            "type": "likert",
+            "scale": [1, 2, 3, 4, 5]
+          },
+          {
+            "id": "personal_relationships",
+            "text": "How satisfied are you with your personal relationships (family, friends)?",
+            "type": "likert",
+            "scale": [1, 2, 3, 4, 5]
+          },
+          {
+            "id": "social_exchange",
+            "text": "How effectively do you feel you give and receive social support?",
+            "type": "likert",
+            "scale": [1, 2, 3, 4, 5]
+          },
+          {
+            "id": "daily_engagement",
+            "text": "How engaged do you feel in your work or daily activities?",
+            "type": "likert",
+            "scale": [1, 2, 3, 4, 5]
+          },
+          {
+            "id": "sense_of_accomplishment",
+            "text": "How would you rate your sense of accomplishment in your personal or professional life?",
+            "type": "likert",
+            "scale": [1, 2, 3, 4, 5]
+          },
+          {
+            "id": "physical_health_adv",
+            "text": "Rate your physical health.",
+            "type": "likert",
+            "scale": [1, 2, 3, 4, 5]
+          },
+          {
+            "id": "material_conditions",
+            "text": "How would you rate your current material conditions (income, housing, employment stability)?",
+            "type": "likert",
+            "scale": [1, 2, 3, 4, 5]
+          },
+          {
+            "id": "personal_safety",
+            "text": "Do you feel safe in your personal environment?",
+            "type": "likert",
+            "scale": [1, 2, 3, 4, 5],
+            "note": "1 = Not at all safe, 5 = Completely safe"
+          },
+          {
+            "id": "local_environment",
+            "text": "How satisfied are you with the state of your local environment (cleanliness, green spaces, etc.)?",
+            "type": "likert",
+            "scale": [1, 2, 3, 4, 5]
+          },
+          {
+            "id": "civic_engagement",
+            "text": "How involved are you in community or civic activities?",
+            "type": "likert",
+            "scale": [1, 2, 3, 4, 5]
+          },
+          {
+            "id": "open_advanced_1",
+            "text": "Please describe any specific circumstances or factors that have significantly influenced your well-being over the past year.",
+            "type": "text"
+          },
+          {
+            "id": "open_advanced_2",
+            "text": "What personal or professional changes would you most like to see to improve your well-being?",
+            "type": "text"
+          }
+        ]
+      }
+    ]
+  }
+  

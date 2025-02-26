@@ -7,5 +7,8 @@
   },
   "gregory": {
     "password": "scrypt:32768:8:1$rbwX5UqB5P5EAW9X$9a0c6f1e0f884b037988c67181725f951c68740335a16e0018aec35f5aed05e1ec2e18960615bc1ab0c784291de9cf9447631d9a2d1b665874cded55dae8ce12"
+  },
+  "julie": {
+    "password": "scrypt:32768:8:1$eySGxmbHgjfejaYc$ea74fd0abc3f64c853eeadb85ea5166cae2690a960f69336d89d6a642ce911b0f75bb437a292ecfe4bce59875e3b1381d56dc76a6465cd7eddc703f488bf06e1"
   }
 }
