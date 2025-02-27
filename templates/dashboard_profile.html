@@ -23,7 +23,7 @@
     <nav class="sidebar-nav">
       <ul>
         <li>
-          <a href="{{ url_for('survey.dashboard') }}">
+          <a href="{{ url_for('dashboard') }}">
             <i class="fas fa-tachometer-alt"></i>
             <span>Dashboard</span>
           </a>
@@ -41,13 +41,13 @@
           </a>
         </li>
         <li>
-          <a href="{{ url_for('survey.dashboard_history') }}">
+          <a href="{{ url_for('dashboard_history') }}">
             <i class="fas fa-history"></i>
             <span>My History</span>
           </a>
         </li>
         <li>
-          <a href="{{ url_for('survey.dashboard') }}">
+          <a href="{{ url_for('dashboard') }}">
             <i class="fas fa-chart-line"></i>
             <span>Reports</span>
           </a>
@@ -58,13 +58,13 @@
       
       <ul>
         <li class="active">
-          <a href="{{ url_for('survey.dashboard_profile') }}">
+          <a href="{{ url_for('dashboard_profile') }}">
             <i class="fas fa-user"></i>
             <span>My Profile</span>
           </a>
         </li>
         <li>
-          <a href="{{ url_for('survey.dashboard') }}">
+          <a href="{{ url_for('dashboard') }}">
             <i class="fas fa-cog"></i>
             <span>Settings</span>
           </a>
@@ -114,10 +114,10 @@
           </button>
           
           <div id="userDropdownMenu" class="dropdown-menu">
-            <a href="{{ url_for('survey.dashboard_profile') }}" class="dropdown-item">
+            <a href="{{ url_for('dashboard_profile') }}" class="dropdown-item">
               <i class="fas fa-user"></i> My Profile
             </a>
-            <a href="{{ url_for('survey.dashboard') }}" class="dropdown-item">
+            <a href="{{ url_for('dashboard') }}" class="dropdown-item">
               <i class="fas fa-cog"></i> Settings
             </a>
             <div class="dropdown-divider"></div>

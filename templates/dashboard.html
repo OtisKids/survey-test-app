@@ -13,7 +13,7 @@
   <aside class="dashboard-sidebar" id="dashboardSidebar">
     <div class="sidebar-header">
       <div class="logo">
-        <img src="{{ url_for('static', filename='images/mindtrack-logo.svg') }}" alt="MindTrack Logo">
+        <img src="{{ url_for('static', filename='img/mindtrack_logo.png') }}" alt="MindTrack Logo">
       </div>
       <button id="sidebarClose" class="sidebar-close">
         <i class="fas fa-times"></i>
@@ -28,20 +28,7 @@
             <span>Dashboard</span>
           </a>
         </li>
-        <li>
-          <a href="{{ url_for('survey.take_survey', survey_id=1) }}">
-            <i class="fas fa-clipboard-list"></i>
-            <span>Take Survey</span>
-          </a>
-        </li>
-        <li>
-          <a href="{{ url_for('survey.dashboard_surveys') }}">
-            <i class="fas fa-book"></i>
-            <span>Survey Catalog</span>
-          </a>
-        </li>
-        <li>
-          <a href="{{ url_for('survey.dashboard_history') }}">
+          <a href="{{ url_for('dashboard_history') }}">
             <i class="fas fa-history"></i>
             <span>My History</span>
           </a>
@@ -58,7 +45,7 @@
       
       <ul>
         <li>
-          <a href="{{ url_for('survey.dashboard_profile') }}">
+          <a href="{{ url_for('dashboard_profile') }}">
             <i class="fas fa-user"></i>
             <span>My Profile</span>
           </a>
@@ -112,33 +99,7 @@
             <span class="user-name">{{ session.username }}</span>
             <i class="fas fa-chevron-down"></i>
           </button>
-          
-          <div id="userDropdownMenu" class="dropdown-menu">
-            <a href="{{ url_for('survey.dashboard_profile') }}" class="dropdown-item">
-              <i class="fas fa-user"></i> My Profile
-            </a>
-            <a href="{{ url_for('survey.dashboard') }}" class="dropdown-item">
-              <i class="fas fa-cog"></i> Settings
-            </a>
-            <div class="dropdown-divider"></div>
-            <a href="{{ url_for('logout') }}" class="dropdown-item">
-              <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
-          </div>
         </div>
-          
-          <div id="userDropdownMenu" class="dropdown-menu">
-            <a href="{{ url_for('survey.dashboard_profile') }}" class="dropdown-item">
-              <i class="fas fa-user"></i> My Profile
-            </a>
-            <a href="{{ url_for('survey.dashboard_surveys') }}" class="dropdown-item">
-              <i class="fas fa-cog"></i> Settings
-            </a>
-            <div class="dropdown-divider"></div>
-            <a href="{{ url_for('logout') }}" class="dropdown-item">
-              <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
-          </div>
         </div>
       </div>
     </header>
@@ -156,8 +117,89 @@
           </div>
         </div>
       </section>
+
+      
       
       <section class="dashboard-section">
+        <!-- Recent Activity -->
+      <div class="activity-timeline">
+        {% if recent_activities %}
+          {% for activity in recent_activities %}
+            <div class="timeline-item">
+              <div class="timeline-icon">
+                <i class="fas fa-clipboard-check"></i>
+              </div>
+              <div class="timeline-content">
+                <h3>{{ activity.title }} Completed</h3>
+                <p>{{ activity.message }}</p>
+                <span class="timeline-date">{{ activity.date }}</span>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <!-- Empty State - You can keep this as is or modify based on your application's needs -->
+          <div class="empty-state">
+            <div class="empty-icon">
+              <i class="fas fa-history"></i>
+            </div>
+            <h3>No Activity Yet</h3>
+            <p>Take your first survey to start tracking your wellbeing journey.</p>
+            <a href="{{ url_for('survey.take_survey', survey_id=1) }}" class="btn btn-primary">Take a Survey</a>
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Radar Graph -->
+      <div id="radar_graph">
+        {{ radar_graph_html | safe }}
+      </div>
+
+      <!-- Stats Overview -->
+      <div class="stats-overview">
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Surveys Completed</h3>
+            <p class="stat-value">{{ stats.surveys_completed }}</p>
+            <p class="stat-trend positive">{{ stats.surveys_completed_trend }}</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-calendar-check"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Consecutive Days</h3>
+            <p class="stat-value">{{ stats.consecutive_days }}</p>
+            <p class="stat-trend">{{ stats.consecutive_days_trend }}</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-smile"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Average Mood</h3>
+            <p class="stat-value">{{ stats.average_mood }}</p>
+            <p class="stat-trend {{ stats.average_mood_trend_class }}">{{ stats.average_mood_trend }}</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-brain"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Mindfulness Score</h3>
+            <p class="stat-value">{{ stats.mindfulness_score }}</p>
+            <p class="stat-trend {{ stats.mindfulness_score_trend_class }}">{{ stats.mindfulness_score_trend }}</p>
+          </div>
+        </div>
+      </div>
         <div class="section-header">
           <h2>Your Progress</h2>
           <div class="section-actions">
@@ -165,51 +207,7 @@
           </div>
         </div>
         
-        <div class="stats-overview">
-          <div class="stat-card">
-            <div class="stat-icon">
-              <i class="fas fa-check-circle"></i>
-            </div>
-            <div class="stat-content">
-              <h3>Surveys Completed</h3>
-              <p class="stat-value">12</p>
-              <p class="stat-trend positive">+2 from last week</p>
-            </div>
-          </div>
-          
-          <div class="stat-card">
-            <div class="stat-icon">
-              <i class="fas fa-calendar-check"></i>
-            </div>
-            <div class="stat-content">
-              <h3>Consecutive Days</h3>
-              <p class="stat-value">5</p>
-              <p class="stat-trend">Keep it up!</p>
-            </div>
-          </div>
-          
-          <div class="stat-card">
-            <div class="stat-icon">
-              <i class="fas fa-smile"></i>
-            </div>
-            <div class="stat-content">
-              <h3>Average Mood</h3>
-              <p class="stat-value">Good</p>
-              <p class="stat-trend positive">Improving</p>
-            </div>
-          </div>
-          
-          <div class="stat-card">
-            <div class="stat-icon">
-              <i class="fas fa-brain"></i>
-            </div>
-            <div class="stat-content">
-              <h3>Mindfulness Score</h3>
-              <p class="stat-value">78/100</p>
-              <p class="stat-trend positive">+5 points</p>
-            </div>
-          </div>
-        </div>
+        
       </section>
       
       <div class="dashboard-columns">
