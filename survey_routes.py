@@ -4,23 +4,33 @@ from typing import Any, Dict, List, Union
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from functools import wraps
 
-# Configure logging for this module
+# Configure logging for this module. In a production system consider centralizing logging config.
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Initialize the survey blueprint.
 survey_bp = Blueprint('survey', __name__)
 
-# File paths
+# File paths (Consider moving these to a centralized configuration in the future)
 TEMPLATES_FILE = 'survey_templates.json'
 SURVEYS_FILE = 'surveys.json'
 RESPONSES_FILE = 'responses.json'
-CATALOG_FILE = 'survey_catalog.json'  # File for the catalog
+CATALOG_FILE = 'survey_catalog.json'
 
 # ---------------------------
 # Helper Functions
 # ---------------------------
 def load_json_file(filename: str, default: Union[dict, list]) -> Union[dict, list]:
-    """Load JSON data from a file, returning a default value on error."""
+    """
+    Load JSON data from a file.
+
+    Args:
+        filename: The path to the JSON file.
+        default: The default value to return if loading fails.
+
+    Returns:
+        The loaded JSON data or the default value if an error occurs.
+    """
     try:
         with open(filename, 'r') as f:
             data = json.load(f)
@@ -30,7 +40,13 @@ def load_json_file(filename: str, default: Union[dict, list]) -> Union[dict, lis
         return default
 
 def save_json_file(filename: str, data: Any) -> None:
-    """Save JSON data to a file."""
+    """
+    Save JSON data to a file.
+
+    Args:
+        filename: The path to the file.
+        data: The data to save.
+    """
     try:
         with open(filename, 'w') as f:
             json.dump(data, f, indent=2)
@@ -70,7 +86,10 @@ def save_catalog(catalog: Dict[str, Any]) -> None:
     save_json_file(CATALOG_FILE, catalog)
 
 def login_required(f):
-    """Decorator to ensure a user is logged in before accessing protected routes."""
+    """
+    Decorator to ensure a user is logged in before accessing protected routes.
+    If the user is not logged in, they are redirected to the login page with an error message.
+    """
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'username' not in session:
@@ -80,22 +99,72 @@ def login_required(f):
     return decorated_function
 
 # ---------------------------
+# Dashboard Routes
+# ---------------------------
+@survey_bp.route('/dashboard')
+@login_required
+def dashboard():
+    """
+    Main dashboard route.
+    Displays an overview of the user's activity, surveys, and stats.
+    """
+    # You can add more data to pass to the template as needed
+    return render_template('dashboard.html')
+
+@survey_bp.route('/dashboard/history')
+@login_required
+def dashboard_history():
+    """
+    User's survey history dashboard.
+    Shows previous survey completions and results.
+    """
+    # Get the user's survey responses
+    responses = load_responses()
+    user_responses = [r for r in responses if r.get('username') == session['username']]
+    
+    # Get the survey data to display survey names
+    surveys = load_surveys()
+    survey_dict = {s.get('id'): s for s in surveys.get('surveys', [])}
+    
+    return render_template(
+        'dashboard_history.html',
+        responses=user_responses,
+        survey_dict=survey_dict
+    )
+
+@survey_bp.route('/dashboard/profile')
+@login_required
+def dashboard_profile():
+    """
+    User profile dashboard.
+    Allows users to view and edit their profile information.
+    """
+    # You would typically fetch user profile info from a database
+    # For now, we're just returning basic session info
+    user_info = {
+        'username': session.get('username', 'Unknown User'),
+        'email': session.get('email', '')
+    }
+    return render_template('dashboard_profile.html', user=user_info)
+
+# ---------------------------
 # Survey Template Routes
 # ---------------------------
-
 @survey_bp.route('/create_template', methods=['GET', 'POST'])
 @login_required
 def create_template():
     """
     Create a new survey template.
-    
+
     GET: Render the creation form.
-    POST: Process the form and save the new template.
+    POST: Process the form submission and save the new template.
     """
     if request.method == 'POST':
         title = request.form.get('title', '').strip()
         questions = request.form.getlist('questions[]')
         templates = load_templates()
+        
+        # Compute a new template id (note: this can lead to conflicts if deletions occur)
         new_template = {
             "id": len(templates["templates"]) + 1,
             "title": title,
@@ -112,27 +181,33 @@ def create_template():
 def dashboard_surveys():
     """
     Dashboard view for surveys that shows both templates and surveys.
+    
+    Renders the survey details page with the list of templates and surveys.
     """
     templates = load_templates()
     surveys = load_surveys()
-    return render_template('survey_details.html',
-                           templates=templates.get("templates", []),
-                           surveys=surveys.get("surveys", []))
+    return render_template(
+        'survey_details.html',
+        templates=templates.get("templates", []),
+        surveys=surveys.get("surveys", [])
+    )
 
 @survey_bp.route('/customize/<int:template_id>', methods=['GET', 'POST'])
 @login_required
 def customize_survey(template_id: int):
     """
     Customize an existing survey template.
-    
+
     GET: Render a customization form.
-    POST: Update template title and questions.
+    POST: Update the template title and questions.
     """
     templates = load_templates()
     template = next((t for t in templates.get("templates", []) if t.get("id") == template_id), None)
+    
     if not template:
         flash("Template not found", "error")
         return redirect(url_for('survey.dashboard_surveys'))
+    
     if request.method == 'POST':
         template['title'] = request.form.get('title', template.get('title', '')).strip()
         questions = request.form.getlist('questions[]')
@@ -141,6 +216,7 @@ def customize_survey(template_id: int):
         save_templates(templates)
         flash("Template updated!", "success")
         return redirect(url_for('survey.dashboard_surveys'))
+    
     return render_template('customize_survey.html', template=template)
 
 @survey_bp.route('/edit_template/<int:template_id>', methods=['GET', 'POST'])
@@ -148,15 +224,17 @@ def customize_survey(template_id: int):
 def edit_template(template_id: int):
     """
     Edit a survey template.
-    
+
     GET: Render the edit form.
     POST: Save the edited template details.
     """
     templates = load_templates()
     template = next((t for t in templates.get("templates", []) if t.get("id") == template_id), None)
+    
     if not template:
         flash("Template not found", "error")
         return redirect(url_for('survey.dashboard_surveys'))
+    
     if request.method == 'POST':
         template['title'] = request.form.get('title', template.get('title', '')).strip()
         questions = request.form.getlist('questions[]')
@@ -165,40 +243,39 @@ def edit_template(template_id: int):
         save_templates(templates)
         flash("Template edited successfully!", "success")
         return redirect(url_for('survey.dashboard_surveys'))
+    
     return render_template('edit_template.html', template=template)
 
 # ---------------------------
 # Survey Upload and Taking Routes
 # ---------------------------
-
 @survey_bp.route('/upload', methods=['GET', 'POST'])
 @login_required
 def upload_surveys():
     """
     Upload surveys from a JSON file.
-    
+
     GET: Render the upload form.
-    POST: Process and save uploaded survey data.
+    POST: Process and save the uploaded survey data.
     """
     if request.method == 'POST':
         file = request.files.get('file')
-        if file:
+        if file and file.filename:
             try:
                 data = json.load(file)
                 surveys = load_surveys()
+                # Add new surveys to the existing list
                 surveys["surveys"].extend(data.get("surveys", []))
                 save_surveys(surveys)
-                # Update the catalog if surveys are provided in the file.
-                # Assumes the file doesn't include the "allowedCategories" key.
+                
+                # Update the catalog with the uploaded surveys
                 catalog = load_catalog()
-                # Initialize catalog structure if necessary:
-                if not catalog.get("surveys"):
-                    catalog["surveys"] = []
+                catalog.setdefault("surveys", [])
                 for survey in data.get("surveys", []):
-                    # Ensure survey id exists.
                     if "id" in survey:
                         catalog["surveys"].append(survey)
                 save_catalog(catalog)
+                
                 flash("Surveys uploaded successfully!", "success")
                 return redirect(url_for('survey.dashboard_surveys'))
             except Exception as e:
@@ -215,15 +292,17 @@ def upload_surveys():
 def take_survey(survey_id: int):
     """
     Route to take a survey by its survey_id.
-    
+
     GET: Render the survey for answering.
-    POST: Process user responses.
+    POST: Process and save user responses.
     """
     surveys = load_surveys()
     survey_item = next((s for s in surveys.get("surveys", []) if s.get("id") == survey_id), None)
+    
     if not survey_item:
         flash("Survey not found", "error")
         return redirect(url_for('survey.dashboard_surveys'))
+    
     if request.method == 'POST':
         answers = {}
         for idx, question in enumerate(survey_item.get("questions", [])):
@@ -237,21 +316,21 @@ def take_survey(survey_id: int):
         save_responses(responses)
         flash("Thank you for submitting the survey!", "success")
         return redirect(url_for('survey.dashboard_surveys'))
+    
     return render_template('take_survey.html', survey=survey_item)
 
 # ---------------------------
 # Catalog Routes
 # ---------------------------
-
 @survey_bp.route('/catalog')
 @login_required
 def catalog():
     """
     Display the survey catalog.
-    
+
     The catalog JSON is expected to have the keys:
-      - "allowedCategories": list of category names
-      - "surveys": list of survey objects
+      - "allowedCategories": a list of category names
+      - "surveys": a list of survey objects
     """
     catalog_data = load_catalog()
     surveys = catalog_data.get("surveys", [])
@@ -263,17 +342,19 @@ def catalog():
 def take_catalog_survey(survey_key: str):
     """
     Take a survey from the catalog by its key.
-    
+
     GET: Render the catalog survey.
-    POST: Process the submission of catalog survey responses.
+    POST: Process and save catalog survey responses.
     """
     catalog_data = load_catalog()
-    # Look for the survey in the catalog "surveys" list by matching the survey id (always converted to string)
+    # Find the survey by matching the string conversion of the survey id.
     surveys = catalog_data.get("surveys", [])
     survey_item = next((s for s in surveys if str(s.get("id", "")) == survey_key), None)
+    
     if not survey_item:
         flash("Survey not found in the catalog", "error")
         return redirect(url_for('survey.catalog'))
+    
     if request.method == 'POST':
         answers = {}
         for idx, question in enumerate(survey_item.get("questions", [])):
@@ -287,4 +368,5 @@ def take_catalog_survey(survey_key: str):
         save_responses(responses)
         flash("Thank you for submitting the catalog survey!", "success")
         return redirect(url_for('survey.catalog'))
+    
     return render_template('take_survey_catalog.html', survey=survey_item, survey_key=survey_key)

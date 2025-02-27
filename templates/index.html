@@ -1,14 +1,247 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Survey App - Welcome</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Discover your mental wellbeing journey with our interactive survey platform - the Netflix of wellbeing">
+  <title>MindTrack - Your Personal Wellbeing Journey</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
-  <h1>Welcome to the Survey App</h1>
-  <p>
-    <a href="{{ url_for('login') }}">Login</a> |
-    <a href="{{ url_for('register') }}">Register</a>
-  </p>
+  <header class="site-header">
+    <div class="container">
+      <nav class="main-nav">
+        <div class="logo">
+          <img src="{{ url_for('static', filename='img/landing_page.png') }}" alt="MindTrack Logo">
+          <span>MindTrack</span>
+        </div>
+        <ul class="nav-links">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#how-it-works">How It Works</a></li>
+          <li><a href="#testimonials">Testimonials</a></li>
+        </ul>
+        <div class="auth-buttons">
+          <a href="{{ url_for('login') }}" class="btn btn-outline">Log In</a>
+          <a href="{{ url_for('register') }}" class="btn btn-primary">Sign Up Free</a>
+        </div>
+        <button class="mobile-menu-toggle" aria-label="Toggle menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <h1>Track & Improve Your Mental Wellbeing Journey</h1>
+          <p class="lead">Discover insights about yourself through our curated catalog of interactive surveys and track your progress over time.</p>
+          <div class="cta-group">
+            <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">Start Your Free Assessment</a>
+            <a href="#how-it-works" class="btn btn-text">Learn More <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+        <div class="hero-image">
+          <img src="{{ url_for('static', filename='img/hero-illustration.png') }}" alt="Mental health journey illustration">
+        </div>
+      </div>
+    </section>
+
+    <section class="benefits" id="features">
+      <div class="container">
+        <h2 class="section-title">Your Personal Wellbeing Companion</h2>
+        <p class="section-subtitle">Discover Why Thousands Trust MindTrack for Their Mental Health Journey</p>
+        
+        <div class="benefits-grid">
+          <div class="benefit-card">
+            <div class="icon-wrapper">
+              <i class="fas fa-book-open"></i>
+            </div>
+            <h3>Extensive Survey Library</h3>
+            <p>Access over 100+ scientifically validated assessments covering anxiety, depression, stress, relationships, and more.</p>
+          </div>
+          
+          <div class="benefit-card">
+            <div class="icon-wrapper">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <h3>Track Your Progress</h3>
+            <p>Visualize your wellbeing journey with intuitive charts and see meaningful changes over time.</p>
+          </div>
+          
+          <div class="benefit-card">
+            <div class="icon-wrapper">
+              <i class="fas fa-user-shield"></i>
+            </div>
+            <h3>Completely Private</h3>
+            <p>Your data is encrypted and never shared. We prioritize your privacy and confidentiality.</p>
+          </div>
+          
+          <div class="benefit-card">
+            <div class="icon-wrapper">
+              <i class="fas fa-lightbulb"></i>
+            </div>
+            <h3>Personalized Insights</h3>
+            <p>Receive tailored recommendations based on your results to improve your mental wellbeing.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="how-it-works" id="how-it-works">
+      <div class="container">
+        <h2 class="section-title">How MindTrack Works</h2>
+        <p class="section-subtitle">Three Simple Steps to Better Mental Wellbeing</p>
+        
+        <div class="steps">
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <h3>Take a Survey</h3>
+            <p>Choose from our extensive catalog of scientifically-backed assessments.</p>
+          </div>
+          
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <h3>Get Insights</h3>
+            <p>Receive personalized analysis of your mental wellbeing status.</p>
+          </div>
+          
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <h3>Track Progress</h3>
+            <p>Monitor your journey and see improvements over time with regular check-ins.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="testimonials" id="testimonials">
+      <div class="container">
+        <h2 class="section-title">What Our Users Say</h2>
+        <div class="testimonial-slider">
+          <div class="testimonial">
+            <div class="quote">"MindTrack helped me understand my anxiety patterns and gave me tools to address them. I've seen remarkable improvement in just two months."</div>
+            <div class="author">
+              <img src="{{ url_for('static', filename='img/testimonial-1.png') }}" alt="Sarah T.">
+              <div>
+                <h4>Sarah T.</h4>
+                <p>Member for 3 months</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="testimonial">
+            <div class="quote">"As a team leader, I've used MindTrack to help improve our workplace wellbeing. The group insights have been invaluable for creating a supportive environment."</div>
+            <div class="author">
+              <img src="{{ url_for('static', filename='img/testimonial-2.png') }}" alt="Marie L.">
+              <div>
+                <h4>Marie L.</h4>
+                <p>Team Lead at TechCorp</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="testimonial">
+            <div class="quote">"I appreciate how the app tracks my progress. Seeing the positive changes in my mental health has been incredibly motivating."</div>
+            <div class="author">
+              <img src="{{ url_for('static', filename='img/testimonial-3.png') }}" alt="Jamie K.">
+              <div>
+                <h4>Jamie K.</h4>
+                <p>Member for 6 months</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-section">
+      <div class="container">
+        <div class="cta-card">
+          <h2>Ready to Start Your Wellbeing Journey?</h2>
+          <p>Join thousands of users who are taking control of their mental health with MindTrack.</p>
+          <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">Start Free Assessment</a>
+          <div class="cta-features">
+            <div class="feature">
+              <i class="fas fa-check-circle"></i>
+              <span>No credit card required</span>
+            </div>
+            <div class="feature">
+              <i class="fas fa-check-circle"></i>
+              <span>Cancel anytime</span>
+            </div>
+            <div class="feature">
+              <i class="fas fa-check-circle"></i>
+              <span>Free initial assessment</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo">
+            <img src="{{ url_for('static', filename='img/landing_page.png') }}" alt="MindTrack Logo">
+            <span>MindTrack</span>
+          </div>
+          <p>Your companion for mental wellbeing tracking and improvement.</p>
+          <div class="social-links">
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        
+        <div class="footer-links">
+          <h3>Company</h3>
+          <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press</a></li>
+            <li><a href="#">Blog</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-links">
+          <h3>Support</h3>
+          <ul>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">FAQs</a></li>
+            <li><a href="#">Community</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-links">
+          <h3>Legal</h3>
+          <ul>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Cookie Policy</a></li>
+            <li><a href="#">Security</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2023 MindTrack. All rights reserved.</p>
+        <p>MindTrack is not a replacement for professional mental health services. If you're in crisis, please contact your local emergency services.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

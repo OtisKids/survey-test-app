@@ -1,36 +1,64 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Create Survey Template</title>
+  <!-- Link to your external stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-  <h1>Create Survey Template</h1>
-  <form method="post">
-    <label>Template Title:</label><br>
-    <input type="text" name="title" required><br><br>
-    <div id="questions">
-      <label>Question 1:</label><br>
-      <input type="text" name="questions[]" required><br>
-    </div>
-    <button type="button" onclick="addQuestion()">Add Question</button><br><br>
-    <input type="submit" value="Create Template">
-  </form>
-  <p><a href="{{ url_for('dashboard') }}">Back to Dashboard</a></p>
+  <main>
+    <h1>Create Survey Template</h1>
+    <form method="post">
+      <div class="form-group">
+        <label for="template-title">Template Title:</label><br>
+        <input type="text" id="template-title" name="title" required>
+      </div>
+      <br>
+      <div id="questions">
+        <div class="question-group">
+          <label for="question1">Question 1:</label><br>
+          <input type="text" id="question1" name="questions[]" required>
+        </div>
+      </div>
+      <button type="button" onclick="addQuestion()">Add Question</button>
+      <br><br>
+      <input type="submit" value="Create Template">
+    </form>
+    <p><a href="{{ url_for('dashboard') }}">Back to Dashboard</a></p>
+  </main>
 
   <script>
     function addQuestion() {
-      var div = document.getElementById('questions');
-      var count = div.getElementsByTagName('input').length + 1;
-      var label = document.createElement('label');
-      label.innerHTML = 'Question ' + count + ':<br>';
-      var input = document.createElement('input');
+      const div = document.getElementById('questions');
+      // count current number of questions by selecting question groups
+      const count = div.getElementsByClassName('question-group').length + 1;
+      
+      // Create a container for the new question
+      const questionGroup = document.createElement('div');
+      questionGroup.className = 'question-group';
+      
+      // Create label
+      const label = document.createElement('label');
+      label.setAttribute('for', 'question' + count);
+      label.innerHTML = 'Question ' + count + ':';
+      
+      // Create input
+      const input = document.createElement('input');
       input.type = 'text';
+      input.id = 'question' + count;
       input.name = 'questions[]';
       input.required = true;
-      div.appendChild(label);
-      div.appendChild(input);
-      div.appendChild(document.createElement('br'));
+      
+      // Append label and input to the container
+      questionGroup.appendChild(label);
+      questionGroup.appendChild(document.createElement('br'));
+      questionGroup.appendChild(input);
+      questionGroup.appendChild(document.createElement('br'));
+      
+      // Append the container to the questions div
+      div.appendChild(questionGroup);
     }
   </script>
 </body>

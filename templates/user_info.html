@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>User Information</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Link to the merged external stylesheet -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+      </head>
+<body>
+  <h1>Personal Information</h1>
+  <p>Username: {{ user.username }}</p>
+  <p>Email: {{ user.email }}</p>
+  <p><a href="{{ url_for('dashboard') }}">Back to Dashboard</a></p>
+</body>
+</html>

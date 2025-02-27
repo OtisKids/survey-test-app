@@ -7,6 +7,14 @@
         "How do you feel about you today ? ",
         "Rate your energy levels from 1 to 5, 5 being the maximum"
       ]
+    },
+    {
+      "id": 2,
+      "title": "My own template",
+      "questions": [
+        "How do you feel about you today ?",
+        "Do you think you are ok? "
+      ]
     }
   ]
 }

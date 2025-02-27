@@ -1,39 +1,52 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Survey Details</title>
+  <!-- Link to the external stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-  <h1>Survey Details</h1>
-  <p><a href="{{ url_for('dashboard') }}">Back to Dashboard</a></p>
-  <h2>Survey Templates</h2>
-  {% if templates %}
-    <ul>
-      {% for template in templates %}
-        <li>
-          <strong>{{ template.title }}</strong>
-          (<a href="{{ url_for('survey.customize_survey', template_id=template.id) }}">Customize</a> |
-           <a href="{{ url_for('survey.edit_template', template_id=template.id) }}">Edit</a>)
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>No survey templates available.</p>
-  {% endif %}
-  
-  <h2>Uploaded Surveys</h2>
-  {% if surveys %}
-    <ul>
-      {% for survey in surveys %}
-        <li>
-          <strong>{{ survey.title }}</strong>
-          (<a href="{{ url_for('survey.take_survey', survey_id=survey.id) }}">Take Survey</a>)
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>No surveys available.</p>
-  {% endif %}
+  <header>
+    <h1>Survey Details</h1>
+    <p><a href="{{ url_for('dashboard') }}">Back to Dashboard</a></p>
+  </header>
+  <main>
+    <section>
+      <h2>Survey Templates</h2>
+      {% if templates %}
+        <ul>
+          {% for template in templates %}
+            <li>
+              <strong>{{ template.title }}</strong>
+              ( 
+                <a href="{{ url_for('survey.customize_survey', template_id=template.id) }}">Customize</a> |
+                <a href="{{ url_for('survey.edit_template', template_id=template.id) }}">Edit</a>
+              )
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>No survey templates available.</p>
+      {% endif %}
+    </section>
+    
+    <section>
+      <h2>Uploaded Surveys</h2>
+      {% if surveys %}
+        <ul>
+          {% for survey in surveys %}
+            <li>
+              <strong>{{ survey.title }}</strong>
+              ( <a href="{{ url_for('survey.take_survey', survey_id=survey.id) }}">Take Survey</a> )
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>No surveys available.</p>
+      {% endif %}
+    </section>
+  </main>
 </body>
 </html>

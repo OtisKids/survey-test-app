@@ -1,20 +1,243 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Register</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Create your MindTrack account and start your wellbeing journey today">
+  <title>MindTrack - Create Account</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
-  <h1>Register</h1>
-  <form method="post">
-    <label>Username:</label><br>
-    <input type="text" name="username" required><br><br>
-    <label>Password:</label><br>
-    <input type="password" name="password" required><br><br>
-    <label>Confirm Password:</label><br>
-    <input type="password" name="confirm_password" required><br><br>
-    <input type="submit" value="Register">
-  </form>
-  <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+  <header class="site-header">
+    <div class="container">
+      <nav class="main-nav">
+        <a href="{{ url_for('index') }}" class="logo">
+          <img src="{{ url_for('static', filename='img/landing_page.png') }}" alt="MindTrack Logo">
+          <span>MindTrack</span>
+        </a>
+        <div class="auth-buttons">
+          <a href="{{ url_for('login') }}" class="btn btn-outline">Sign In</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="auth-container">
+      <div class="container">
+        <div class="auth-card">
+          <div class="auth-header">
+            <h1>Create Your Account</h1>
+            <p>Join MindTrack and begin your wellness journey</p>
+          </div>
+
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                  <i class="fas fa-info-circle"></i>
+                  {{ message }}
+                </div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+          
+          <!-- Social Registration Options -->
+          <div class="social-auth-buttons">
+            <a href="{{ url_for('google_register') }}" class="btn btn-social btn-google">
+              <svg class="google-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="18px" height="18px">
+                <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
+                <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/>
+                <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/>
+                <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/>
+              </svg>
+              <span>Sign up with Google</span>
+            </a>
+            <button class="btn btn-social btn-facebook">
+              <i class="fab fa-facebook-f"></i>
+              <span>Sign up with Facebook</span>
+            </button>
+          </div>
+          
+          <div class="auth-divider">
+            <span>or sign up with email</span>
+          </div>
+          
+          <!-- Standard Registration Form -->
+          <form method="post" class="auth-form" id="register-form">
+            <div class="form-group">
+              <label for="username">Username</label>
+              <div class="input-with-icon">
+                <i class="fas fa-user"></i>
+                <input type="text" id="username" name="username" required autocomplete="username">
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <div class="input-with-icon">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="email" name="email" required autocomplete="email">
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="password">Password</label>
+              <div class="input-with-icon">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password" name="password" required autocomplete="new-password"
+                       pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$">
+                <button type="button" class="password-toggle" aria-label="Toggle password visibility">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+              <div class="password-requirements">
+                <p>Password must contain:</p>
+                <ul>
+                  <li id="length" class="requirement">At least 8 characters</li>
+                  <li id="uppercase" class="requirement">At least 1 uppercase letter</li>
+                  <li id="lowercase" class="requirement">At least 1 lowercase letter</li>
+                  <li id="number" class="requirement">At least 1 number</li>
+                  <li id="special" class="requirement">At least 1 special character</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="confirm_password">Confirm Password</label>
+              <div class="input-with-icon">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="confirm_password" name="confirm_password" required autocomplete="new-password">
+                <button type="button" class="password-toggle" aria-label="Toggle password visibility">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+            </div>
+            
+            <div class="form-group remember-me">
+              <label class="checkbox-container">
+                <input type="checkbox" id="terms" name="terms" required>
+                <span class="checkmark"></span>
+                I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+              </label>
+            </div>
+            
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary btn-lg btn-block">Create Account</button>
+            </div>
+          </form>
+          
+          <div class="auth-footer">
+            <p>Already have an account? <a href="{{ url_for('login') }}">Sign In</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2023 MindTrack. All rights reserved.</p>
+        <p>Need help? <a href="#">Contact Support</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Password visibility toggle for both password fields
+      const passwordToggles = document.querySelectorAll('.password-toggle');
+      
+      passwordToggles.forEach(toggle => {
+        toggle.addEventListener('click', function() {
+          const passwordField = this.parentElement.querySelector('input');
+          const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+          passwordField.setAttribute('type', type);
+          
+          // Toggle icon
+          const icon = this.querySelector('i');
+          icon.classList.toggle('fa-eye');
+          icon.classList.toggle('fa-eye-slash');
+        });
+      });
+      
+      // Password strength validation
+      const passwordField = document.getElementById('password');
+      const confirmPasswordField = document.getElementById('confirm_password');
+      const requirements = {
+        length: document.getElementById('length'),
+        uppercase: document.getElementById('uppercase'),
+        lowercase: document.getElementById('lowercase'),
+        number: document.getElementById('number'),
+        special: document.getElementById('special')
+      };
+      
+      // Add form submission validation
+      const form = document.getElementById('register-form');
+      
+      form.addEventListener('submit', function(e) {
+        let isValid = true;
+        
+        // Check if passwords match
+        if (passwordField.value !== confirmPasswordField.value) {
+          isValid = false;
+          
+          // Create or update error message
+          let errorMessage = confirmPasswordField.parentElement.nextElementSibling;
+          if (!errorMessage || !errorMessage.classList.contains('error-message')) {
+            errorMessage = document.createElement('div');
+            errorMessage.className = 'error-message';
+            confirmPasswordField.parentElement.after(errorMessage);
+          }
+          errorMessage.textContent = 'Passwords do not match';
+          
+          // Add error class
+          confirmPasswordField.classList.add('error');
+        } else {
+          // Remove error if it exists
+          const errorMessage = confirmPasswordField.parentElement.nextElementSibling;
+          if (errorMessage && errorMessage.classList.contains('error-message')) {
+            errorMessage.remove();
+          }
+          confirmPasswordField.classList.remove('error');
+        }
+        
+        if (!isValid) {
+          e.preventDefault();
+        }
+      });
+      
+      // Real-time password validation
+      passwordField.addEventListener('input', function() {
+        const value = this.value;
+        
+        // Update requirements status
+        requirements.length.classList.toggle('met', value.length >= 8);
+        requirements.uppercase.classList.toggle('met', /[A-Z]/.test(value));
+        requirements.lowercase.classList.toggle('met', /[a-z]/.test(value));
+        requirements.number.classList.toggle('met', /\d/.test(value));
+        requirements.special.classList.toggle('met', /[@$!%*?&]/.test(value));
+      });
+      
+      // Confirm password validation
+      confirmPasswordField.addEventListener('input', function() {
+        // Check if passwords match
+        if (this.value !== passwordField.value) {
+          this.setCustomValidity('Passwords do not match');
+        } else {
+          this.setCustomValidity('');
+        }
+      });
+    });
+  </script>
+  
+ 
 </body>
 </html>

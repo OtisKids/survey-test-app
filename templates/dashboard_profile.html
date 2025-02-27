@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MindTrack - My Profile</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body class="dashboard-page">
+  
+  <!-- Sidebar Navigation -->
+  <aside class="dashboard-sidebar" id="dashboardSidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <img src="{{ url_for('static', filename='images/mindtrack-logo.svg') }}" alt="MindTrack Logo">
+      </div>
+      <button id="sidebarClose" class="sidebar-close">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <nav class="sidebar-nav">
+      <ul>
+        <li>
+          <a href="{{ url_for('survey.dashboard') }}">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('survey.take_survey', survey_id=1) }}">
+            <i class="fas fa-clipboard-list"></i>
+            <span>Take Survey</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('survey.dashboard_surveys') }}">
+            <i class="fas fa-book"></i>
+            <span>Survey Catalog</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('survey.dashboard_history') }}">
+            <i class="fas fa-history"></i>
+            <span>My History</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('survey.dashboard') }}">
+            <i class="fas fa-chart-line"></i>
+            <span>Reports</span>
+          </a>
+        </li>
+      </ul>
+      
+      <div class="sidebar-divider"></div>
+      
+      <ul>
+        <li class="active">
+          <a href="{{ url_for('survey.dashboard_profile') }}">
+            <i class="fas fa-user"></i>
+            <span>My Profile</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('survey.dashboard') }}">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('logout') }}">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    
+    <div class="sidebar-footer">
+      <button data-toggle="modal" data-target="#sourcesModal" class="btn-text">
+        <i class="fas fa-book-open"></i>
+        <span>Scientific Sources</span>
+      </button>
+    </div>
+  </aside>
+  
+  <!-- Main Dashboard Content -->
+  <main class="dashboard-main">
+    <header class="dashboard-header">
+      <div class="header-left">
+        <button id="sidebarToggle" class="sidebar-toggle">
+          <i class="fas fa-bars"></i>
+        </button>
+        <h1>My Profile</h1>
+      </div>
+      
+      <div class="header-right">
+        <div class="notifications">
+          <button class="notification-btn">
+            <i class="far fa-bell"></i>
+            <span class="notification-badge">3</span>
+          </button>
+        </div>
+        
+        <div class="user-dropdown">
+          <button id="userDropdownToggle" class="user-dropdown-toggle">
+            <div class="user-avatar">
+              <span>{{ user.username[0] | upper }}</span>
+            </div>
+            <span class="user-name">{{ user.username }}</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          
+          <div id="userDropdownMenu" class="dropdown-menu">
+            <a href="{{ url_for('survey.dashboard_profile') }}" class="dropdown-item">
+              <i class="fas fa-user"></i> My Profile
+            </a>
+            <a href="{{ url_for('survey.dashboard') }}" class="dropdown-item">
+              <i class="fas fa-cog"></i> Settings
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="{{ url_for('logout') }}" class="dropdown-item">
+              <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+    
+    <div class="dashboard-content">
+      <div class="dashboard-columns">
+        <section class="dashboard-section column-left">
+          <div class="section-header">
+            <h2>Profile Information</h2>
+            <div class="section-actions">
+              <button class="btn btn-primary">
+                <i class="fas fa-save"></i> Save Changes
+              </button>
+            </div>
+          </div>
+          
+          <div class="profile-form">
+            <div class="profile-avatar-section">
+              <div class="profile-avatar large">
+                <span>{{ user.username[0] | upper }}</span>
+              </div>
+              <div class="avatar-actions">
+                <button class="btn btn-outline">
+                  <i class="fas fa-camera"></i> Change Photo
+                </button>
+                <button class="btn btn-text">
+                  <i class="fas fa-trash"></i> Remove
+                </button>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input type="text" id="username" name="username" value="{{ user.username }}" class="form-control">
+            </div>
+            
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" name="email" value="{{ user.email }}" class="form-control">
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="first_name">First Name</label>
+                <input type="text" id="first_name" name="first_name" class="form-control">
+              </div>
+              
+              <div class="form-group">
+                <label for="last_name">Last Name</label>
+                <input type="text" id="last_name" name="last_name" class="form-control">
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="bio">Bio</label>
+              <textarea id="bio" name="bio" class="form-control" rows="3" placeholder="Tell us a bit about yourself..."></textarea>
+            </div>
+          </div>
+        </section>
+        
+        <section class="dashboard-section column-right">
+          <div class="section-header">
+            <h2>Account Settings</h2>
+          </div>
+          
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="fas fa-lock"></i> Security</h3>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label for="current_password">Current Password</label>
+                <input type="password" id="current_password" name="current_password" class="form-control">
+              </div>
+              
+              <div class="form-group">
+                <label for="new_password">New Password</label>
+                <input type="password" id="new_password" name="new_password" class="form-control">
+              </div>
+              
+              <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" class="form-control">
+              </div>
+              
+              <button class="btn btn-outline">
+                <i class="fas fa-key"></i> Change Password
+              </button>
+            </div>
+          </div>
+          
+          <div class="card mt-4">
+            <div class="card-header">
+              <h3><i class="fas fa-bell"></i> Notifications</h3>
+            </div>
+            <div class="card-body">
+              <div class="toggle-group">
+                <label for="email_notifications">Email Notifications</label>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="email_notifications" checked>
+                  <label for="email_notifications"></label>
+                </div>
+              </div>
+              
+              <div class="toggle-group">
+                <label for="survey_reminders">Survey Reminders</label>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="survey_reminders" checked>
+                  <label for="survey_reminders"></label>
+                </div>
+              </div>
+              
+              <div class="toggle-group">
+                <label for="progress_updates">Progress Updates</label>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="progress_updates">
+                  <label for="progress_updates"></label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="danger-zone mt-4">
+            <h3>Danger Zone</h3>
+            <div class="danger-actions">
+              <button class="btn btn-danger">
+                <i class="fas fa-trash"></i> Delete Account
+              </button>
+              <p class="small-text">This action cannot be undone. All your data will be permanently deleted.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    
+    <footer class="dashboard-footer">
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Help Center</a>
+        <a href="#" data-toggle="modal" data-target="#sourcesModal">Scientific Sources</a>
+      </div>
+      <p>&copy; 2023 MindTrack. All rights reserved.</p>
+    </footer>
+  </main>
+  
+  <!-- Sources Modal -->
+  <div class="modal" id="sourcesModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Scientific Sources & References</h3>
+          <button class="modal-close" data-dismiss="modal">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <ul class="sources-list">
+            <li>
+              <strong>Wellbeing Assessment Methodology</strong>
+              <p>Our daily wellbeing assessment is based on validated measures from positive psychology research.</p>
+              <p><a href="https://doi.org/10.1037/0022-3514.69.4.719" target="_blank">Diener, E., Emmons, R. A., Larsen, R. J., & Griffin, S. (1985). The Satisfaction with Life Scale. Journal of Personality Assessment, 49, 71-75.</a></p>
+            </li>
+            <li>
+              <strong>Anxiety Measurement</strong>
+              <p>Our anxiety assessment incorporates elements from the GAD-7, a clinically validated tool for measuring anxiety.</p>
+              <p><a href="https://doi.org/10.1001/archinte.166.10.1092" target="_blank">Spitzer, R. L., Kroenke, K., Williams, J. B., & Löwe, B. (2006). A brief measure for assessing generalized anxiety disorder: the GAD-7. Archives of internal medicine, 166(10), 1092-1097.</a></p>
+            </li>
+            <li>
+              <strong>Sleep Quality Assessment</strong>
+              <p>Our sleep quality survey is adapted from the Pittsburgh Sleep Quality Index (PSQI).</p>
+              <p><a href="https://doi.org/10.1016/0165-1781(89)90047-4" target="_blank">Buysse, D. J., Reynolds, C. F., Monk, T. H., Berman, S. R., & Kupfer, D. J. (1989). The Pittsburgh Sleep Quality Index: a new instrument for psychiatric practice and research. Psychiatry research, 28(2), 193-213.</a></p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

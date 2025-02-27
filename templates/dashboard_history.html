@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MindTrack - Survey History</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body class="dashboard-page">
+  
+  <!-- Sidebar Navigation -->
+  <aside class="dashboard-sidebar" id="dashboardSidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <img src="{{ url_for('static', filename='images/mindtrack-logo.svg') }}" alt="MindTrack Logo">
+      </div>
+      <button id="sidebarClose" class="sidebar-close">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <nav class="sidebar-nav">
+      <ul>
+        <li>
+          <a href="{{ url_for('survey.dashboard') }}">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('survey.take_survey', survey_id=1) }}">
+            <i class="fas fa-clipboard-list"></i>
+            <span>Take Survey</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('survey.dashboard_surveys') }}">
+            <i class="fas fa-book"></i>
+            <span>Survey Catalog</span>
+          </a>
+        </li>
+        <li class="active">
+          <a href="{{ url_for('survey.dashboard_history') }}">
+            <i class="fas fa-history"></i>
+            <span>My History</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('survey.dashboard') }}">
+            <i class="fas fa-chart-line"></i>
+            <span>Reports</span>
+          </a>
+        </li>
+      </ul>
+      
+      <div class="sidebar-divider"></div>
+      
+      <ul>
+        <li>
+          <a href="{{ url_for('survey.dashboard_profile') }}">
+            <i class="fas fa-user"></i>
+            <span>My Profile</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('survey.dashboard') }}">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('logout') }}">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    
+    <div class="sidebar-footer">
+      <button data-toggle="modal" data-target="#sourcesModal" class="btn-text">
+        <i class="fas fa-book-open"></i>
+        <span>Scientific Sources</span>
+      </button>
+    </div>
+  </aside>
+  
+  <!-- Main Dashboard Content -->
+  <main class="dashboard-main">
+    <header class="dashboard-header">
+      <div class="header-left">
+        <button id="sidebarToggle" class="sidebar-toggle">
+          <i class="fas fa-bars"></i>
+        </button>
+        <h1>Survey History</h1>
+      </div>
+      
+      <div class="header-right">
+        <div class="notifications">
+          <button class="notification-btn">
+            <i class="far fa-bell"></i>
+            <span class="notification-badge">3</span>
+          </button>
+        </div>
+        
+        <div class="user-dropdown">
+          <button id="userDropdownToggle" class="user-dropdown-toggle">
+            <div class="user-avatar">
+              <span>{{ session.username[0] | upper }}</span>
+            </div>
+            <span class="user-name">{{ session.username }}</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          
+          <div id="userDropdownMenu" class="dropdown-menu">
+            <a href="{{ url_for('survey.dashboard_profile') }}" class="dropdown-item">
+              <i class="fas fa-user"></i> My Profile
+            </a>
+            <a href="{{ url_for('survey.dashboard') }}" class="dropdown-item">
+              <i class="fas fa-cog"></i> Settings
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="{{ url_for('logout') }}" class="dropdown-item">
+              <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+    
+    <div class="dashboard-content">
+      <section class="dashboard-section">
+        <div class="section-header">
+          <h2>Your Survey Responses</h2>
+          <div class="section-actions">
+            <button class="btn btn-text">Filter <i class="fas fa-filter"></i></button>
+          </div>
+        </div>
+        
+        {% if responses %}
+          <div class="history-table-container">
+            <table class="history-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Survey Name</th>
+                  <th>Questions</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for response in responses %}
+                  <tr>
+                    <td>{{ response.get('timestamp', 'Unknown date') }}</td>
+                    <td>
+                      {% if response.get('survey_id') in survey_dict %}
+                        {{ survey_dict[response.get('survey_id')].get('title', 'Unknown survey') }}
+                      {% elif response.get('survey_key') %}
+                        Survey #{{ response.get('survey_key') }}
+                      {% else %}
+                        Unknown survey
+                      {% endif %}
+                    </td>
+                    <td>{{ response.get('answers', {})|length }}</td>
+                    <td><span class="status-badge complete">Completed</span></td>
+                    <td>
+                      <div class="table-actions">
+                        <button class="btn btn-icon" title="View details">
+                          <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-icon" title="Download results">
+                          <i class="fas fa-download"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          
+          <nav class="pagination">
+            <ul>
+              <li class="disabled"><a href="#"><i class="fas fa-chevron-left"></i></a></li>
+              <li class="active"><a href="#">1</a></li>
+              <li><a href="#">2</a></li>
+              <li><a href="#">3</a></li>
+              <li><span>...</span></li>
+              <li><a href="#">10</a></li>
+              <li><a href="#"><i class="fas fa-chevron-right"></i></a></li>
+            </ul>
+          </nav>
+        {% else %}
+          <div class="empty-state">
+            <div class="empty-icon">
+              <i class="fas fa-history"></i>
+            </div>
+            <h3>No Survey History</h3>
+            <p>You haven't completed any surveys yet. Take your first survey to start tracking your wellbeing journey.</p>
+            <a href="{{ url_for('survey.take_survey', survey_id=1) }}" class="btn btn-primary">Take a Survey</a>
+          </div>
+        {% endif %}
+      </section>
+      
+      <section class="dashboard-section">
+        <div class="section-header">
+          <h2>Activity Summary</h2>
+        </div>
+        
+        <div class="stats-overview">
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Total Surveys</h3>
+              <p class="stat-value">{{ responses|length }}</p>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-calendar-check"></i>
+            </div>
+            <div class="stat-content">
+              <h3>This Month</h3>
+              <p class="stat-value">{{ responses|length }}</p> <!-- In a real app, you'd filter by month -->
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-star"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Streak</h3>
+              <p class="stat-value">5 days</p> <!-- This would be calculated in a real app -->
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-graduation-cap"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Achievement Points</h3>
+              <p class="stat-value">150</p> <!-- This would be calculated in a real app -->
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    
+    <footer class="dashboard-footer">
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Help Center</a>
+        <a href="#" data-toggle="modal" data-target="#sourcesModal">Scientific Sources</a>
+      </div>
+      <p>&copy; 2023 MindTrack. All rights reserved.</p>
+    </footer>
+  </main>
+  
+  <!-- Sources Modal -->
+  <div class="modal" id="sourcesModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Scientific Sources & References</h3>
+          <button class="modal-close" data-dismiss="modal">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <ul class="sources-list">
+            <li>
+              <strong>Wellbeing Assessment Methodology</strong>
+              <p>Our daily wellbeing assessment is based on validated measures from positive psychology research.</p>
+              <p><a href="https://doi.org/10.1037/0022-3514.69.4.719" target="_blank">Diener, E., Emmons, R. A., Larsen, R. J., & Griffin, S. (1985). The Satisfaction with Life Scale. Journal of Personality Assessment, 49, 71-75.</a></p>
+            </li>
+            <li>
+              <strong>Anxiety Measurement</strong>
+              <p>Our anxiety assessment incorporates elements from the GAD-7, a clinically validated tool for measuring anxiety.</p>
+              <p><a href="https://doi.org/10.1001/archinte.166.10.1092" target="_blank">Spitzer, R. L., Kroenke, K., Williams, J. B., & Löwe, B. (2006). A brief measure for assessing generalized anxiety disorder: the GAD-7. Archives of internal medicine, 166(10), 1092-1097.</a></p>
+            </li>
+            <li>
+              <strong>Sleep Quality Assessment</strong>
+              <p>Our sleep quality survey is adapted from the Pittsburgh Sleep Quality Index (PSQI).</p>
+              <p><a href="https://doi.org/10.1016/0165-1781(89)90047-4" target="_blank">Buysse, D. J., Reynolds, C. F., Monk, T. H., Berman, S. R., & Kupfer, D. J. (1989). The Pittsburgh Sleep Quality Index: a new instrument for psychiatric practice and research. Psychiatry research, 28(2), 193-213.</a></p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>
