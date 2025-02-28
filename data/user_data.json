@@ -1,0 +1,31 @@
+{
+    "g.butheau@gmail.com": {
+        "wellbeing": {
+            "Subjective Well-Being": 0,
+            "Positive Affect": 0,
+            "Life Satisfaction": 0,
+            "Material Living Conditions": 0,
+            "Quality of Life": 0,
+            "Self-acceptance": 0,
+            "Positive Relations": 0,
+            "Autonomy": 0,
+            "Environmental Mastery": 0,
+            "Purpose in Life": 0,
+            "Personal Growth": 0,
+            "Positive Emotion": 0,
+            "Engagement": 0,
+            "Relationships": 0,
+            "Meaning": 0,
+            "Accomplishment": 0,
+            "Competence": 0,
+            "Social Connections": 0,
+            "Personal Security": 0
+        },
+        "surveys": [],
+        "stats": {
+            "surveys_completed": 0,
+            "last_survey_date": null,
+            "trend": "neutral"
+        }
+    }
+}

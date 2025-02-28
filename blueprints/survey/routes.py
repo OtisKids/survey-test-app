@@ -21,6 +21,38 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+'''
+ToDo: when a user complete a survey, we need to get and store its results, update userdata, save history, and mark the survey as completed.
+Below is a code for updating userdata
+
+def submit_survey():
+    """Process survey submission"""
+    try:
+        username = session.get('username')
+        survey_type = request.form.get('survey_type')
+        
+        # Collect survey data from form
+        survey_data = {}
+        for key, value in request.form.items():
+            if key.startswith('question_'):
+                survey_data[key] = value
+        
+        # Process survey and update wellbeing scores
+        success = process_survey_and_update_wellbeing(username, survey_type, survey_data)
+        
+        if success:
+            flash("Survey completed successfully!", "success")
+        else:
+            flash("There was an error processing your survey.", "error")
+        
+        return redirect(url_for('dashboard_bp.index'))
+    except Exception as e:
+        logger.error(f"Error submitting survey: {str(e)}")
+        flash("Error submitting survey", "error")
+        return redirect(url_for('dashboard_bp.index'))
+
+'''
+
 @survey_bp.route('/take/<int:survey_id>', methods=['GET', 'POST'])
 @login_required
 def take_survey(survey_id):
