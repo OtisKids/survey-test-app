@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# IDE and editor configuration files
+.vscode/
+.idea/
+*.iml
+*.sublime-project
+*.sublime-workspace
+.vscode/
+
+# Build artifacts and temporary files
+build/
+dist/
+*.egg-info
+*.egg
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints
+
+# Miscellaneous
+.DS_Store
+Thumbs.db
