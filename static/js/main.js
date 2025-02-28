@@ -211,6 +211,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // ======= Form validation for CTA =======
+    /*
     const ctaForm = document.querySelector('.cta-form');
     if (ctaForm) {
         ctaForm.addEventListener('submit', function(e) {
@@ -245,7 +246,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+    */
     
+
     // ======= Add animation classes =======
     // Add these CSS classes to the stylesheet for animated elements
     const style = document.createElement('style');

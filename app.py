@@ -34,22 +34,22 @@ def create_app(test_config=None):
         os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
     
     # Register blueprints
-    from survey_routes import survey_bp
-    from user.routes import user_bp
-    from dashboard.routes import dashboard_bp
-    from auth.google_auth import google_bp
+    from blueprints.survey import survey_bp
+    from blueprints.user import user_bp
+    from blueprints.dashboard import dashboard_bp
+    from blueprints.auth import auth_bp
     
     app.register_blueprint(survey_bp, url_prefix='/surveys')
     app.register_blueprint(user_bp, url_prefix='/user')
     app.register_blueprint(dashboard_bp, url_prefix='/dashboard')
-    app.register_blueprint(google_bp, url_prefix="/login")
+    app.register_blueprint(auth_bp, url_prefix="/login")
     
     # Root route
     @app.route('/')
     def index():
         """Index route with conditional redirect to dashboard"""
         if 'username' in session:
-            return redirect(url_for('dashboard_bp.dashboard'))
+            return redirect(url_for('dashboard.index'))
         return render_template('index.html')
     
     return app

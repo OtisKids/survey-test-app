@@ -10,5 +10,11 @@
   },
   "julie": {
     "password": "scrypt:32768:8:1$eySGxmbHgjfejaYc$ea74fd0abc3f64c853eeadb85ea5166cae2690a960f69336d89d6a642ce911b0f75bb437a292ecfe4bce59875e3b1381d56dc76a6465cd7eddc703f488bf06e1"
+  },
+  "g.butheau@gmail.com": {
+    "name": "gb",
+    "email": "g.butheau@gmail.com",
+    "password": "scrypt:32768:8:1$6L7Xa5m5hkwy1T1f$5abb804b31555cb8326b994e7c0bac9a9257724b8d3ec2ceef832ad0caf9500b36047ba3df0e7447ab4f59beeffae70fbb4673b2803b48f18022f2712f096933",
+    "google_auth": false
   }
 }

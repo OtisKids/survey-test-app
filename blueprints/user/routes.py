@@ -1,75 +1,99 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-from app import load_users, save_users, check_password_hash, generate_password_hash
+# blueprints/user/routes.py
+import logging
+from flask import render_template, redirect, url_for, session, flash, request
+from helpers.survey_helpers import load_users, save_users, load_responses
+from blueprints.user import user_bp
+from functools import wraps
 
-user_bp = Blueprint('user', __name__, url_prefix='/user')
+logger = logging.getLogger(__name__)
 
-@user_bp.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        username = request.form.get('username', '').strip()
-        password = request.form.get('password', '').strip()
+def login_required(f):
+    """Decorator to check if user is logged in"""
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'username' not in session:
+            flash('Please log in to access this page', 'error')
+            return redirect(url_for('auth.login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+@user_bp.route('/profile')
+@login_required
+def profile():
+    """User profile page"""
+    try:
+        username = session.get('username')
         users = load_users()
-        if username in users:
-            stored_hash = users[username]['password']
-            if check_password_hash(stored_hash, password):
-                session['username'] = username
-                flash("Logged in successfully!", "success")
-                return redirect(url_for('user.dashboard'))
-            else:
-                flash("Incorrect password.", "error")
-        else:
-            flash("User not found.", "error")
-        return redirect(url_for('user.login'))
-    return render_template('login.html')
+        user_info = users.get(username, {})
+        
+        return render_template('user_info.html', user=user_info)
+    except Exception as e:
+        logger.error(f"Error loading user profile: {str(e)}")
+        flash("Error loading profile data", "error")
+        return redirect(url_for('dashboard.index'))
 
-@user_bp.route('/register', methods=['GET', 'POST'])
-def register():
-    if request.method == 'POST':
-        username = request.form.get('username', '').strip()
-        password = request.form.get('password', '').strip()
-        confirm_password = request.form.get('confirm_password', '').strip()
+@user_bp.route('/update_profile', methods=['POST'])
+@login_required
+def update_profile():
+    """Update user profile information"""
+    try:
+        username = session.get('username')
         users = load_users()
-        if username in users:
-            flash("Username already exists.", "error")
-            return redirect(url_for('user.register'))
-        if password!= confirm_password:
-            flash("Passwords do not match.", "error")
-            return redirect(url_for('user.register'))
-        hashed = generate_password_hash(password)
-        users[username] = {'password': hashed}
+        
+        if username not in users:
+            flash("User not found", "error")
+            return redirect(url_for('user.profile'))
+        
+        # Update fields
+        name = request.form.get('name', '').strip()
+        if name:
+            users[username]['name'] = name
+            
+        # Add other fields as needed
+        
         save_users(users)
-        flash("Registered successfully. Please log in.", "success")
-        return redirect(url_for('user.login'))
-    return render_template('register.html')
+        flash("Profile updated successfully", "success")
+        return redirect(url_for('user.profile'))
+    except Exception as e:
+        logger.error(f"Error updating profile: {str(e)}")
+        flash("Error updating profile", "error")
+        return redirect(url_for('user.profile'))
 
-@user_bp.route('/logout')
-def logout():
-    session.pop('username', None)
-    flash("Logged out successfully.", "success")
-    return redirect(url_for('user.login'))
+@user_bp.route('/history')
+@login_required
+def history():
+    """View user's survey history"""
+    try:
+        username = session.get('username')
+        responses = load_responses()
+        
+        # Filter responses for this user
+        user_responses = [r for r in responses if r.get('username') == username]
+        
+        return render_template('user_history.html', responses=user_responses)
+    except Exception as e:
+        logger.error(f"Error loading user history: {str(e)}")
+        flash("Error loading history data", "error")
+        return redirect(url_for('dashboard.index'))
 
-
-
-
-@user_bp.route('/user/info')
-def user_info():
-    """
-    User info route.
-
-    Replace with actual logic to fetch user personal information.
-    """
-    user_info = {'username': session.get('username', 'User'), 'email': 'user@example.com'}
-    return render_template("user_info.html", user=user_info)
-
-@user_bp.route('/user/billing')
-def user_billing():
-    """
-    User billing route.
-
-    Replace with actual logic to fetch billing/plans data.
-    """
-    plans = [
-        {'name': 'Free', 'features': 'Basic features'},
-        {'name': 'Premium', 'features': 'Advanced features and priority support'}
-    ]
-    return render_template("user_billing.html", plans=plans)
+@user_bp.route('/billing')
+@login_required
+def billing():
+    """User billing page"""
+    try:
+        username = session.get('username')
+        users = load_users()
+        user_info = users.get(username, {})
+        
+        # Add billing-specific data here
+        billing_info = {
+            'plan': 'Free',
+            'next_payment': 'N/A',
+            'payment_method': 'None'
+        }
+        
+        return render_template('user_billing.html', user=user_info, billing=billing_info)
+    except Exception as e:
+        logger.error(f"Error loading billing page: {str(e)}")
+        flash("Error loading billing information", "error")
+        return redirect(url_for('dashboard.index'))

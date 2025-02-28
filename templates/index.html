@@ -25,8 +25,8 @@
           <li><a href="#testimonials">Testimonials</a></li>
         </ul>
         <div class="auth-buttons">
-          <a href="{{ url_for('login') }}" class="btn btn-outline">Log In</a>
-          <a href="{{ url_for('register') }}" class="btn btn-primary">Sign Up Free</a>
+          <a href="{{ url_for('auth.login') }}" class="btn btn-outline">Log In</a>
+          <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Sign Up Free</a>
         </div>
         <button class="mobile-menu-toggle" aria-label="Toggle menu">
           <span></span>
@@ -44,7 +44,7 @@
           <h1>Track & Improve Your Mental Wellbeing Journey</h1>
           <p class="lead">Discover insights about yourself through our curated catalog of interactive surveys and track your progress over time.</p>
           <div class="cta-group">
-            <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">Start Your Free Assessment</a>
+            <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg">Start Your Free Assessment</a>
             <a href="#how-it-works" class="btn btn-text">Learn More <i class="fas fa-arrow-right"></i></a>
           </div>
         </div>
@@ -167,7 +167,7 @@
         <div class="cta-card">
           <h2>Ready to Start Your Wellbeing Journey?</h2>
           <p>Join thousands of users who are taking control of their mental health with MindTrack.</p>
-          <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">Start Free Assessment</a>
+          <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg">Start Free Assessment</a>
           <div class="cta-features">
             <div class="feature">
               <i class="fas fa-check-circle"></i>

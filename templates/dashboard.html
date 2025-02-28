@@ -19,22 +19,32 @@
         <i class="fas fa-times"></i>
       </button>
     </div>
+
+    <div class="user-dropdown">
+      <button id="userDropdownToggle" class="user-dropdown-toggle">
+        <div class="user-avatar">
+          <span>{{ session.username[0] | upper }}</span>
+        </div>
+        <span class="user-name">{{ session.username }}</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+    </div>
     
     <nav class="sidebar-nav">
       <ul>
         <li class="active">
-          <a href="{{ url_for('survey.dashboard_surveys') }}">
+          <a href="{{ url_for('survey.catalog') }}">
             <i class="fas fa-tachometer-alt"></i>
             <span>Dashboard</span>
           </a>
         </li>
-          <a href="{{ url_for('dashboard_history') }}">
+          <a href="{{ url_for('user.history') }}">
             <i class="fas fa-history"></i>
             <span>My History</span>
           </a>
         </li>
         <li>
-          <a href="{{ url_for('survey.dashboard_surveys') }}">
+          <a href="{{ url_for('user.profile') }}">
             <i class="fas fa-chart-line"></i>
             <span>Reports</span>
           </a>
@@ -45,19 +55,19 @@
       
       <ul>
         <li>
-          <a href="{{ url_for('dashboard_profile') }}">
+          <a href="{{ url_for('user.profile') }}">
             <i class="fas fa-user"></i>
             <span>My Profile</span>
           </a>
         </li>
         <li>
-          <a href="{{ url_for('survey.dashboard_surveys') }}">
+          <a href="{{ url_for('user.profile') }}">
             <i class="fas fa-cog"></i>
             <span>Settings</span>
           </a>
         </li>
         <li>
-          <a href="{{ url_for('logout') }}">
+          <a href="{{ url_for('auth.logout') }}">
             <i class="fas fa-sign-out-alt"></i>
             <span>Logout</span>
           </a>
@@ -91,15 +101,6 @@
           </button>
         </div>
         
-        <div class="user-dropdown">
-          <button id="userDropdownToggle" class="user-dropdown-toggle">
-            <div class="user-avatar">
-              <span>{{ session.username[0] | upper }}</span>
-            </div>
-            <span class="user-name">{{ session.username }}</span>
-            <i class="fas fa-chevron-down"></i>
-          </button>
-        </div>
         </div>
       </div>
     </header>
@@ -108,7 +109,7 @@
       <section class="dashboard-section">
         <div class="welcome-card">
           <div class="welcome-content">
-            <h2>Welcome back, {{ session.username[0] }}!</h2>
+            <h2>Welcome back, {{ session.username }}!</h2>
             <p>Ready to check in on your wellbeing today? Take your daily survey to track your mental health journey.</p>
             <a href="{{ url_for('survey.take_survey', survey_id=1) }}" class="btn btn-primary">Take Today's Survey</a>
           </div>
@@ -215,7 +216,7 @@
           <div class="section-header">
             <h2>Survey Catalog</h2>
             <div class="section-actions">
-              <a href="{{ url_for('survey.dashboard_surveys') }}" class="btn btn-text">View All <i class="fas fa-arrow-right"></i></a>
+              <a href="{{ url_for('survey.catalog') }}" class="btn btn-text">View All <i class="fas fa-arrow-right"></i></a>
             </div>
           </div>
           
